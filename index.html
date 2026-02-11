@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PAI Slide Contrast Quick Test</title>
+  <style>
+    :root{
+      --pai-blue:#38B0F8;
+      --pai-gray:#D8D8E0;
+      --pai-navy:#002048;
+      --bg:#0b1220;
+      --card:#0f1b32;
+      --text:#eaf2ff;
+      --muted:#b9c7e6;
+      --border:rgba(216,216,224,.18);
+      --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      background:linear-gradient(180deg, var(--pai-navy), var(--bg));
+      color:var(--text);
+    }
+    .wrap{max-width:980px;margin:0 auto;padding:18px}
+    .card{
+      background:linear-gradient(180deg, rgba(15,27,50,.92), rgba(15,27,50,.78));
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    header{
+      display:flex;align-items:center;gap:14px;
+      padding:16px 16px 12px 16px;
+      border-bottom:1px solid var(--border);
+    }
+    .mark{
+      width:40px;height:40px;border-radius:12px;
+      background:radial-gradient(circle at 30% 30%, var(--pai-blue), rgba(56,176,248,.35));
+      border:1px solid rgba(56,176,248,.35);
+      box-shadow:0 10px 22px rgba(56,176,248,.18);
+      flex:0 0 auto;
+    }
+    h1{font-size:16px;margin:0}
+    .sub{margin:2px 0 0 0;color:var(--muted);font-size:13px}
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+      padding:16px;
+    }
+    @media (max-width:860px){ .grid{grid-template-columns:1fr} }
+    .panel{
+      background:rgba(0,0,0,.16);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:14px;
+    }
+    .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    label{font-size:13px;color:var(--muted)}
+    input[type="color"]{
+      width:46px;height:36px;border:none;background:transparent;cursor:pointer;
+    }
+    input[type="text"]{
+      width:120px;
+      padding:9px 10px;
+      border-radius:10px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+    }
+    .btn{
+      padding:10px 12px;border-radius:12px;
+      border:1px solid rgba(56,176,248,.35);
+      background:rgba(56,176,248,.12);
+      color:var(--text);
+      cursor:pointer;
+      font-weight:600;
+    }
+    .btn:hover{background:rgba(56,176,248,.18)}
+    .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .chip{
+      border:1px solid var(--border);
+      background:rgba(216,216,224,.08);
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      color:var(--muted);
+      cursor:pointer;
+    }
+    .chip:hover{border-color:rgba(56,176,248,.35);color:var(--text)}
+    .preview{
+      border-radius:14px;
+      border:1px solid var(--border);
+      overflow:hidden;
+      margin-top:12px;
+    }
+    .slide{
+      height:240px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      padding:18px;
+    }
+    .chart{
+      width:min(520px, 92%);
+      height:160px;
+      border-radius:12px;
+      border:1px dashed rgba(216,216,224,.45);
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      padding:12px 14px;
+      background:rgba(255,255,255,.06);
+      backdrop-filter: blur(2px);
+    }
+    .chartTitle{
+      font-weight:800;
+      letter-spacing:.2px;
+      font-size:15px;
+    }
+    .bars{display:flex;gap:10px;align-items:flex-end;height:90px}
+    .bar{
+      width:18%;
+      border-radius:8px 8px 4px 4px;
+      opacity:.95;
+    }
+    .bar:nth-child(1){height:35%}
+    .bar:nth-child(2){height:60%}
+    .bar:nth-child(3){height:45%}
+    .bar:nth-child(4){height:75%}
+    .bar:nth-child(5){height:55%}
+    .results{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+      margin-top:12px;
+    }
+    @media (max-width:860px){ .results{grid-template-columns:1fr} }
+    .metric{
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px;
+      background:rgba(0,0,0,.14);
+    }
+    .metric h3{margin:0 0 6px 0;font-size:13px;color:var(--muted);font-weight:600}
+    .big{font-size:20px;font-weight:900}
+    .note{color:var(--muted);font-size:13px;margin-top:8px;line-height:1.35}
+    .badge{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:6px 10px;border-radius:999px;font-size:12px;font-weight:700;
+      border:1px solid var(--border);
+      background:rgba(216,216,224,.08);
+    }
+    .ok{border-color:rgba(56,176,248,.45); background:rgba(56,176,248,.12)}
+    footer{
+      padding:12px 16px 16px 16px;
+      color:rgba(185,199,230,.9);
+      font-size:12px;
+      border-top:1px solid var(--border);
+    }
+    a{color:var(--pai-blue);text-decoration:none}
+    a:hover{text-decoration:underline}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <header>
+        <div class="mark" aria-hidden="true"></div>
+        <div>
+          <h1>Slide Contrast Quick Test</h1>
+          <div class="sub">A fast way to check whether your chart elements will “pop” against your slide background (especially on a projector).</div>
+        </div>
+      </header>
+
+      <div class="grid">
+        <div class="panel">
+          <div class="row">
+            <label for="bgColor">Slide background</label>
+            <input id="bgColor" type="color" value="#002048" />
+            <input id="bgHex" type="text" value="#002048" />
+          </div>
+
+          <div class="row" style="margin-top:10px">
+            <label for="fgColor">Chart text / data color</label>
+            <input id="fgColor" type="color" value="#38B0F8" />
+            <input id="fgHex" type="text" value="#38B0F8" />
+          </div>
+
+          <div class="chips" aria-label="Quick presets">
+            <div class="chip" data-bg="#002048" data-fg="#38B0F8">PAI Navy + PAI Blue</div>
+            <div class="chip" data-bg="#ffffff" data-fg="#002048">White + Navy</div>
+            <div class="chip" data-bg="#0b1220" data-fg="#D8D8E0">Dark + Gray</div>
+            <div class="chip" data-bg="#1b1b1b" data-fg="#ffffff">Near-black + White</div>
+          </div>
+
+          <div class="preview">
+            <div id="slide" class="slide">
+              <div id="chart" class="chart">
+                <div id="chartTitle" class="chartTitle">Example Chart Title</div>
+                <div class="bars" id="bars">
+                  <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;color:rgba(185,199,230,.95)">
+                  <span>Axis label</span><span>Legend</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px" class="row">
+            <button class="btn" id="swap">Swap colors</button>
+            <button class="btn" id="reset">Reset to PAI</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="results">
+            <div class="metric">
+              <h3>Contrast ratio</h3>
+              <div class="big" id="ratio">—</div>
+              <div class="note">Higher is better. Projectors + dim rooms usually need stronger contrast than a laptop screen.</div>
+            </div>
+            <div class="metric">
+              <h3>Recommendation</h3>
+              <div id="rec" class="badge">—</div>
+              <div class="note" id="tips">—</div>
+            </div>
+          </div>
+
+          <div class="metric" style="margin-top:12px">
+            <h3>Quick guidance</h3>
+            <div class="note">
+              If your chart background is transparent (as in your article), the slide background becomes the “canvas.”
+              This tool helps you spot when that canvas starts competing with your data.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        Built for PAI-style report and presentation quality. (Works well embedded in an iFrame on Squarespace.)
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    // WCAG contrast ratio helper (sRGB)
+    function hexToRgb(hex){
+      const h = hex.replace('#','').trim();
+      if(!/^[0-9a-fA-F]{6}$/.test(h)) return null;
+      return {
+        r: parseInt(h.slice(0,2),16),
+        g: parseInt(h.slice(2,4),16),
+        b: parseInt(h.slice(4,6),16)
+      };
+    }
+    function srgbToLin(c){
+      c = c/255;
+      return (c <= 0.03928) ? (c/12.92) : Math.pow((c+0.055)/1.055, 2.4);
+    }
+    function relLuminance({r,g,b}){
+      const R = srgbToLin(r), G = srgbToLin(g), B = srgbToLin(b);
+      return 0.2126*R + 0.7152*G + 0.0722*B;
+    }
+    function contrastRatio(bg, fg){
+      const L1 = relLuminance(bg);
+      const L2 = relLuminance(fg);
+      const lighter = Math.max(L1,L2);
+      const darker  = Math.min(L1,L2);
+      return (lighter + 0.05) / (darker + 0.05);
+    }
+
+    const bgColor = document.getElementById('bgColor');
+    const fgColor = document.getElementById('fgColor');
+    const bgHex   = document.getElementById('bgHex');
+    const fgHex   = document.getElementById('fgHex');
+    const ratioEl = document.getElementById('ratio');
+    const recEl   = document.getElementById('rec');
+    const tipsEl  = document.getElementById('tips');
+    const slide   = document.getElementById('slide');
+    const chartTitle = document.getElementById('chartTitle');
+    const bars = Array.from(document.querySelectorAll('.bar'));
+
+    function setAll(bg, fg){
+      bgColor.value = bg;
+      fgColor.value = fg;
+      bgHex.value = bg;
+      fgHex.value = fg;
+      update();
+    }
+
+    function update(){
+      const bg = (bgHex.value || bgColor.value).toUpperCase();
+      const fg = (fgHex.value || fgColor.value).toUpperCase();
+
+      const bgRgb = hexToRgb(bg);
+      const fgRgb = hexToRgb(fg);
+
+      // Keep pickers in sync when user types valid hex
+      if(bgRgb) bgColor.value = bg;
+      if(fgRgb) fgColor.value = fg;
+
+      // Update preview
+      slide.style.background = bgRgb ? bg : slide.style.background;
+      chartTitle.style.color = fgRgb ? fg : chartTitle.style.color;
+      bars.forEach(b => b.style.background = fgRgb ? fg : b.style.background);
+
+      if(!bgRgb || !fgRgb){
+        ratioEl.textContent = '—';
+        recEl.textContent = 'Enter valid hex colors';
+        recEl.className = 'badge';
+        tipsEl.textContent = 'Use #RRGGBB (example: #002048).';
+        return;
+      }
+
+      const cr = contrastRatio(bgRgb, fgRgb);
+      ratioEl.textContent = cr.toFixed(2) + ':1';
+
+      // Recommendation thresholds (stricter than typical body text, because projectors)
+      let rec, tips, ok = false;
+
+      if(cr >= 7){
+        rec = 'Excellent for projection';
+        tips = 'You should be safe in dim rooms and on average projectors. Keep gridlines subtle so they don’t compete.';
+        ok = true;
+      } else if(cr >= 4.5){
+        rec = 'Good (most cases)';
+        tips = 'Likely fine on screens. For projectors, consider slightly darkening the background or brightening the data color.';
+        ok = true;
+      } else if(cr >= 3){
+        rec = 'Borderline';
+        tips = 'Expect issues in conference rooms. Increase contrast: darken the background or switch chart text/data to a lighter/brighter color.';
+      } else {
+        rec = 'Needs adjustment';
+        tips = 'Your background will compete with your data. Fix first: increase contrast before tweaking fonts or spacing.';
+      }
+
+      recEl.textContent = rec;
+      recEl.className = ok ? 'badge ok' : 'badge';
+      tipsEl.textContent = tips;
+    }
+
+    // Events
+    bgColor.addEventListener('input', () => { bgHex.value = bgColor.value.toUpperCase(); update(); });
+    fgColor.addEventListener('input', () => { fgHex.value = fgColor.value.toUpperCase(); update(); });
+
+    bgHex.addEventListener('input', update);
+    fgHex.addEventListener('input', update);
+
+    document.getElementById('swap').addEventListener('click', () => {
+      const bg = bgHex.value.toUpperCase();
+      const fg = fgHex.value.toUpperCase();
+      setAll(fg, bg);
+    });
+
+    document.getElementById('reset').addEventListener('click', () => {
+      setAll('#002048', '#38B0F8');
+    });
+
+    document.querySelectorAll('.chip').forEach(ch => {
+      ch.addEventListener('click', () => setAll(ch.dataset.bg.toUpperCase(), ch.dataset.fg.toUpperCase()));
+    });
+
+    // Init
+    setAll('#002048', '#38B0F8');
+  </script>
+</body>
+</html>
