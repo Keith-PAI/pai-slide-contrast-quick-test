@@ -185,6 +185,22 @@ input[type="text"]{
   background:rgba(56,176,248,.12);
 }
 
+/* Goldilocks glow (subtle) */
+.glowGold .metric:first-child{
+  box-shadow:0 0 0 1px rgba(56,176,248,.25), 0 14px 40px rgba(56,176,248,.10);
+}
+.glowGold #crMarker{
+  box-shadow:0 0 0 1px rgba(56,176,248,.35), 0 10px 26px rgba(56,176,248,.22);
+}
+
+@media (prefers-reduced-motion: no-preference){
+  .glowGold #crMarker{ animation:goldPulse 1.8s ease-in-out infinite; }
+  @keyframes goldPulse{
+    0%,100%{ transform:translateX(-50%) scale(1); opacity:.9; }
+    50%{ transform:translateX(-50%) scale(1.12); opacity:1; }
+  }
+}
+
 /* Comfort Range Bar */
 .crbar{
   position:relative;
@@ -195,9 +211,7 @@ input[type="text"]{
   background:rgba(255,255,255,.04);
   margin-top:10px;
 }
-
 .crbar .seg{height:100%;float:left}
-
 .seg-low{width:22.5%;background:rgba(216,216,224,.10)}
 .seg-gold{width:45%;background:rgba(56,176,248,.16)}
 .seg-high{width:12.5%;background:rgba(56,176,248,.10)}
@@ -234,116 +248,115 @@ footer{
 
 <body>
 <div class="wrap">
-<div class="card">
+  <div class="card">
+    <header>
+      <div class="mark"></div>
+      <div>
+        <h1>Slide Contrast Quick Test</h1>
+        <div class="sub">A fast way to check whether your chart elements will “pop” against your slide background (especially on a projector).</div>
+      </div>
+    </header>
 
-<header>
-<div class="mark"></div>
-<div>
-<h1>Slide Contrast Quick Test</h1>
-<div class="sub">A fast way to check whether your chart elements will “pop” against your slide background (especially on a projector).</div>
-</div>
-</header>
+    <div class="grid">
 
-<div class="grid">
+      <div class="panel">
+        <div class="row">
+          <label>Slide background</label>
+          <input id="bgColor" type="color" value="#002048">
+          <input id="bgHex" type="text" value="#002048">
+        </div>
 
-<div class="panel">
+        <div class="row" style="margin-top:10px">
+          <label>Chart text / data color</label>
+          <input id="fgColor" type="color" value="#38B0F8">
+          <input id="fgHex" type="text" value="#38B0F8">
+        </div>
 
-<div class="row">
-<label>Slide background</label>
-<input id="bgColor" type="color" value="#002048">
-<input id="bgHex" type="text" value="#002048">
-</div>
+        <div class="chips">
+          <div class="chip" data-bg="#002048" data-fg="#38B0F8">PAI Navy + PAI Blue</div>
+          <div class="chip" data-bg="#ffffff" data-fg="#002048">White + Navy</div>
+          <div class="chip" data-bg="#0b1220" data-fg="#D8D8E0">Dark + Gray</div>
+          <div class="chip" data-bg="#1b1b1b" data-fg="#ffffff">Near-black + White</div>
+        </div>
 
-<div class="row" style="margin-top:10px">
-<label>Chart text / data color</label>
-<input id="fgColor" type="color" value="#38B0F8">
-<input id="fgHex" type="text" value="#38B0F8">
-</div>
+        <div class="preview">
+          <div id="slide" class="slide">
+            <div class="chart">
+              <div id="chartTitle" class="chartTitle">Example Chart Title</div>
+              <div class="bars">
+                <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:12px">
+                <span>Axis label</span><span>Legend</span>
+              </div>
+            </div>
+          </div>
+        </div>
 
-<div class="chips">
-<div class="chip" data-bg="#002048" data-fg="#38B0F8">PAI Navy + PAI Blue</div>
-<div class="chip" data-bg="#ffffff" data-fg="#002048">White + Navy</div>
-<div class="chip" data-bg="#0b1220" data-fg="#D8D8E0">Dark + Gray</div>
-<div class="chip" data-bg="#1b1b1b" data-fg="#ffffff">Near-black + White</div>
-</div>
+        <div style="margin-top:12px" class="row">
+          <button class="btn" id="swap">Swap colors</button>
+          <button class="btn" id="reset">Reset to PAI</button>
+        </div>
+      </div>
 
-<div class="preview">
-<div id="slide" class="slide">
-<div class="chart">
-<div id="chartTitle" class="chartTitle">Example Chart Title</div>
-<div class="bars">
-<div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
-</div>
-<div style="display:flex;justify-content:space-between;font-size:12px">
-<span>Axis label</span><span>Legend</span>
-</div>
-</div>
-</div>
-</div>
+      <div class="panel">
+        <div class="results">
 
-<div style="margin-top:12px" class="row">
-<button class="btn" id="swap">Swap colors</button>
-<button class="btn" id="reset">Reset to PAI</button>
-</div>
+          <div class="metric">
+            <h3>Contrast ratio</h3>
+            <div class="big" id="ratio">—</div>
 
-</div>
+            <div class="crbar">
+              <div class="seg seg-low"></div>
+              <div class="seg seg-gold"></div>
+              <div class="seg seg-high"></div>
+              <div class="seg seg-too"></div>
+              <div class="crmarker" id="crMarker"></div>
+            </div>
 
-<div class="panel">
+            <div class="crlabels">
+              <span>Low</span>
+              <span>Goldilocks</span>
+              <span>High</span>
+              <span>Too High</span>
+            </div>
 
-<div class="results">
+            <div class="note">Higher is better. Projectors + dim rooms usually need stronger contrast than a laptop screen.</div>
+          </div>
 
-<div class="metric">
-<h3>Contrast ratio</h3>
-<div class="big" id="ratio">—</div>
+          <div class="metric">
+            <h3>Recommendation</h3>
+            <div id="rec" class="badge">—</div>
+            <div class="note" id="tips">—</div>
+          </div>
 
-<div class="crbar">
-<div class="seg seg-low"></div>
-<div class="seg seg-gold"></div>
-<div class="seg seg-high"></div>
-<div class="seg seg-too"></div>
-<div class="crmarker" id="crMarker"></div>
-</div>
+        </div>
+      </div>
 
-<div class="crlabels">
-<span>Low</span>
-<span>Goldilocks</span>
-<span>High</span>
-<span>Too High</span>
-</div>
+    </div>
 
-<div class="note">Higher is better. Projectors + dim rooms usually need stronger contrast than a laptop screen.</div>
-</div>
-
-<div class="metric">
-<h3>Recommendation</h3>
-<div id="rec" class="badge">—</div>
-<div class="note" id="tips">—</div>
-</div>
-
-</div>
-
-</div>
-</div>
-
-<footer>
-Built for PAI-style report and presentation quality.
-</footer>
-
-</div>
+    <footer>
+      Built for PAI-style report and presentation quality.
+    </footer>
+  </div>
 </div>
 
 <script>
 function hexToRgb(hex){
-hex=hex.replace('#','');
-return{r:parseInt(hex.substr(0,2),16),
-g:parseInt(hex.substr(2,2),16),
-b:parseInt(hex.substr(4,2),16)};
+  hex = (hex || '').trim();
+  if(hex[0] === '#') hex = hex.slice(1);
+  if(!/^[0-9a-fA-F]{6}$/.test(hex)) return null;
+  return {
+    r: parseInt(hex.substr(0,2),16),
+    g: parseInt(hex.substr(2,2),16),
+    b: parseInt(hex.substr(4,2),16)
+  };
 }
-function srgb(c){c/=255;return c<=0.03928?c/12.92:Math.pow((c+0.055)/1.055,2.4)}
-function lum(c){return 0.2126*srgb(c.r)+0.7152*srgb(c.g)+0.0722*srgb(c.b)}
+function srgb(c){ c/=255; return c<=0.03928 ? c/12.92 : Math.pow((c+0.055)/1.055,2.4); }
+function lum(c){ return 0.2126*srgb(c.r)+0.7152*srgb(c.g)+0.0722*srgb(c.b); }
 function contrast(a,b){
-let L1=lum(a),L2=lum(b);
-return (Math.max(L1,L2)+0.05)/(Math.min(L1,L2)+0.05)
+  let L1=lum(a),L2=lum(b);
+  return (Math.max(L1,L2)+0.05)/(Math.min(L1,L2)+0.05);
 }
 
 const bgColor=document.getElementById('bgColor');
@@ -357,64 +370,91 @@ const slide=document.getElementById('slide');
 const bars=document.querySelectorAll('.bar');
 const chartTitle=document.getElementById('chartTitle');
 const crMarker=document.getElementById('crMarker');
+const appCard=document.querySelector('.card');
 
 function setAll(bg,fg){
-bgHex.value=bg;fgHex.value=fg;
-bgColor.value=bg;fgColor.value=fg;
-update();
+  bgHex.value=bg.toUpperCase();
+  fgHex.value=fg.toUpperCase();
+  bgColor.value=bg.toUpperCase();
+  fgColor.value=fg.toUpperCase();
+  update();
 }
 
 function update(){
-const bg=bgHex.value.toUpperCase();
-const fg=fgHex.value.toUpperCase();
-slide.style.background=bg;
-chartTitle.style.color=fg;
-bars.forEach(b=>b.style.background=fg);
+  const bg=(bgHex.value || bgColor.value).toUpperCase();
+  const fg=(fgHex.value || fgColor.value).toUpperCase();
 
-const cr=contrast(hexToRgb(bg),hexToRgb(fg));
-ratioEl.textContent=cr.toFixed(2)+":1";
+  // Keep pickers synced when valid
+  const bgRgb = hexToRgb(bg);
+  const fgRgb = hexToRgb(fg);
 
-const cap=20;
-const pct=Math.max(0,Math.min(100,(cr/cap)*100));
-crMarker.style.left=pct+"%";
+  if(bgRgb) bgColor.value = ('#'+bg.replace('#','').toUpperCase());
+  if(fgRgb) fgColor.value = ('#'+fg.replace('#','').toUpperCase());
 
-let rec,tips,ok=false;
+  // Update preview
+  if(bgRgb) slide.style.background = ('#'+bg.replace('#','').toUpperCase());
+  if(fgRgb){
+    const fgNorm = ('#'+fg.replace('#','').toUpperCase());
+    chartTitle.style.color = fgNorm;
+    bars.forEach(b=>b.style.background=fgNorm);
+  }
 
-if(cr>=16){
-rec="Too High (eye strain risk)";
-tips="Very stark. Consider softening slightly.";
-}else if(cr>13.5){
-rec="High (use with care)";
-tips="Readable but may feel intense in dim rooms.";
-ok=true;
-}else if(cr>=4.5){
-rec="Goldilocks (recommended)";
-tips="Good balance: clear readability without being overly harsh.";
-ok=true;
-}else{
-rec="Low";
-tips="Increase contrast for readability.";
+  if(!bgRgb || !fgRgb){
+    ratioEl.textContent = '—';
+    recEl.textContent = 'Enter valid hex colors';
+    recEl.className = 'badge';
+    tipsEl.textContent = 'Use #RRGGBB (example: #002048).';
+    if(appCard) appCard.classList.remove('glowGold');
+    return;
+  }
+
+  const cr=contrast(bgRgb, fgRgb);
+  ratioEl.textContent=cr.toFixed(2)+":1";
+
+  // Marker position
+  const cap=20;
+  const pct=Math.max(0,Math.min(100,(cr/cap)*100));
+  if(crMarker) crMarker.style.left=pct+"%";
+
+  let rec,tips,ok=false;
+
+  if(cr>=16){
+    rec="Too High (eye strain risk)";
+    tips="Very stark. Consider softening slightly.";
+  }else if(cr>13.5){
+    rec="High (use with care)";
+    tips="Readable but may feel intense in dim rooms.";
+    ok=true;
+  }else if(cr>=4.5){
+    rec="Goldilocks (recommended)";
+    tips="Good balance: clear readability without being overly harsh.";
+    ok=true;
+  }else{
+    rec="Low";
+    tips="Increase contrast for readability.";
+  }
+
+  recEl.textContent=rec;
+  recEl.className=ok?"badge ok":"badge";
+  tipsEl.textContent=tips;
+
+  // Glow only in Goldilocks zone
+  if(appCard){
+    const inGold = (cr >= 4.5 && cr <= 13.5);
+    appCard.classList.toggle('glowGold', inGold);
+  }
 }
 
-recEl.textContent=rec;
-recEl.className=ok?"badge ok":"badge";
-tipsEl.textContent=tips;
-}
-
-bgColor.addEventListener('input',()=>{bgHex.value=bgColor.value;update()});
-fgColor.addEventListener('input',()=>{fgHex.value=fgColor.value;update()});
+bgColor.addEventListener('input',()=>{ bgHex.value=bgColor.value.toUpperCase(); update(); });
+fgColor.addEventListener('input',()=>{ fgHex.value=fgColor.value.toUpperCase(); update(); });
 bgHex.addEventListener('input',update);
 fgHex.addEventListener('input',update);
 
-document.getElementById('swap').onclick=()=>{
-setAll(fgHex.value,bgHex.value);
-};
-document.getElementById('reset').onclick=()=>{
-setAll('#002048','#38B0F8');
-};
+document.getElementById('swap').onclick=()=>{ setAll(fgHex.value,bgHex.value); };
+document.getElementById('reset').onclick=()=>{ setAll('#002048','#38B0F8'); };
 
 document.querySelectorAll('.chip').forEach(ch=>{
-ch.onclick=()=>setAll(ch.dataset.bg,ch.dataset.fg);
+  ch.onclick=()=>setAll(ch.dataset.bg,ch.dataset.fg);
 });
 
 setAll('#002048','#38B0F8');
