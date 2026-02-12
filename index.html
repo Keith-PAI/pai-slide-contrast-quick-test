@@ -322,29 +322,34 @@
       const cr = contrastRatio(bgRgb, fgRgb);
       ratioEl.textContent = cr.toFixed(2) + ':1';
 
-      // Recommendation thresholds (stricter than typical body text, because projectors)
-      let rec, tips, ok = false;
+      // Eye-strain aware thresholds tuned to the built-in presets
+let rec, tips, ok = false;
 
-      if(cr >= 7){
-        rec = 'Excellent for projection';
-        tips = 'You should be safe in dim rooms and on average projectors. Keep gridlines subtle so they don’t compete.';
-        ok = true;
-      } else if(cr >= 4.5){
-        rec = 'Good (most cases)';
-        tips = 'Likely fine on screens. For projectors, consider slightly darkening the background or brightening the data color.';
-        ok = true;
-      } else if(cr >= 3){
-        rec = 'Borderline';
-        tips = 'Expect issues in conference rooms. Increase contrast: darken the background or switch chart text/data to a lighter/brighter color.';
-      } else {
-        rec = 'Needs adjustment';
-        tips = 'Your background will compete with your data. Fix first: increase contrast before tweaking fonts or spacing.';
-      }
+if (cr >= 17) {
+  rec  = 'Way too high (eye strain risk)';
+  tips = 'This can feel harsh in dim rooms. Reduce contrast: soften the data color or slightly darken/lighten the background toward the middle.';
+} else if (cr >= 16) {
+  rec  = 'Too high (eye strain risk)';
+  tips = 'Readable, but may feel overly stark in presentations. Try reducing contrast slightly for comfort.';
+} else if (cr > 13.5) {
+  rec  = 'High contrast (use with care)';
+  tips = 'Often readable, but may feel intense depending on projector brightness and room lighting. Consider slightly reducing contrast.';
+  ok = true; // still acceptable
+} else if (cr >= 4.5) {
+  rec  = 'Goldilocks (recommended)';
+  tips = 'Good balance: clear readability without being overly harsh in dim rooms.';
+  ok = true;
+} else if (cr >= 3) {
+  rec  = 'Borderline';
+  tips = 'May be hard to read in conference rooms. Increase contrast: darken background or brighten data/text color.';
+} else {
+  rec  = 'Needs adjustment';
+  tips = 'Your background will compete with your data. Fix contrast before tweaking fonts or spacing.';
+}
 
-      recEl.textContent = rec;
-      recEl.className = ok ? 'badge ok' : 'badge';
-      tipsEl.textContent = tips;
-    }
+recEl.textContent = rec;
+recEl.className = ok ? 'badge ok' : 'badge';
+tipsEl.textContent = tips;
 
     // Events
     bgColor.addEventListener('input', () => { bgHex.value = bgColor.value.toUpperCase(); update(); });
