@@ -222,10 +222,25 @@
         <div class="panel">
           <div class="results">
             <div class="metric">
-              <h3>Contrast ratio</h3>
-              <div class="big" id="ratio">—</div>
-              <div class="note">Higher is better. Projectors + dim rooms usually need stronger contrast than a laptop screen.</div>
-            </div>
+  <h3>Contrast ratio</h3>
+  <div class="big" id="ratio">—</div>
+
+  <!-- Comfort Range Bar -->
+  <div class="crbar" aria-label="Comfort range bar">
+    <div class="seg seg-low" title="Too low"></div>
+    <div class="seg seg-gold" title="Goldilocks (recommended)"></div>
+    <div class="seg seg-high" title="High (use with care)"></div>
+    <div class="seg seg-too" title="Too high"></div>
+
+    <div class="crmarker" id="crMarker" title="Current contrast"></div>
+  </div>
+  <div class="crlabels" aria-hidden="true">
+    <span>Low</span><span>Goldilocks</span><span>High</span><span>Too High</span>
+  </div>
+
+  <div class="note">Higher is better. Projectors + dim rooms usually need stronger contrast than a laptop screen.</div>
+</div>
+
             <div class="metric">
               <h3>Recommendation</h3>
               <div id="rec" class="badge">—</div>
